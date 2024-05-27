@@ -25,5 +25,10 @@
         </select>
         <button type="submit">Actualizar Evento</button>
     </form>
+
+    <form method="post" action="{% url 'eliminar_evento' evento.0 %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar Evento</button>
+    </form>
 </div>
 {% endblock %}

@@ -20,13 +20,11 @@ def login_page(request):
         user = execute_sql("SELECT * FROM Usuario WHERE email = %s", [email])
 
         if not user:
-            messages.error(request, 'Correo electrónico inválido')
             return redirect(reverse('login'))
         
         user = execute_sql("EXEC login_user @Email = %s, @Password = %s", [email, password])
         
         if not user:
-            messages.error(request, "Contraseña inválida")
             return redirect(reverse('login'))
         else:
             # Autenticación manual ya que no estamos utilizando el modelo de Django
@@ -46,7 +44,6 @@ def register_page(request):
         user = execute_sql("SELECT * FROM Usuario WHERE email = %s", [email])
         
         if user:
-            messages.info(request, "El correo electrónico ya está registrado.")
             return redirect(reverse('register'))
         
         execute_sql(
@@ -54,7 +51,6 @@ def register_page(request):
             [email, nombre, apellido_paterno, apellido_materno, password]
         )
 
-        messages.info(request, "Cuenta creada con éxito")
         user_logout(request)
         return redirect(reverse('login'))
     

@@ -24,5 +24,10 @@
         <li>{{ asistente.0 }}</li>
         {% endfor %}
     </ul>
+
+    <form method="post" action="{% url 'eliminar_asistente' evento.0 %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Eliminarme como Asistente</button>
+    </form>
 </div>
 {% endblock %}

@@ -42,3 +42,16 @@ AS
 BEGIN
     SELECT * FROM Usuario WHERE email = @Email AND password = @Password
 END;
+
+GO
+
+CREATE PROCEDURE EliminarEvento
+    @evento_id INT
+AS
+BEGIN
+    DELETE FROM Asistentes
+    WHERE evento_id = @evento_id;
+
+    DELETE FROM Eventos
+    WHERE id = @evento_id;
+END;

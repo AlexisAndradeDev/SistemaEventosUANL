@@ -92,8 +92,15 @@ def asistir_evento(request, evento_id):
         return redirect('login')
     
     usuario_id = request.session['user_id']
-    execute_sql("INSERT INTO Asistentes (evento_id, usuario_id) VALUES (%s, %s)", [evento_id, usuario_id])
-    messages.success(request, "Te has registrado como asistente al evento")
+ 
+    asistencia = execute_sql("SELECT * FROM Asistentes WHERE evento_id = %s AND usuario_id = %s", [evento_id, usuario_id])
+
+    if asistencia:
+        messages.success(request, 'Ya eres asistente del evento.')
+    else:
+        execute_sql("INSERT INTO Asistentes (evento_id, usuario_id) VALUES (%s, %s)", [evento_id, usuario_id])
+        messages.success(request, "Te has registrado como asistente al evento")
+
     return redirect('evento_detalle', evento_id=evento_id)
 
 def editar_evento(request, evento_id):
@@ -102,7 +109,6 @@ def editar_evento(request, evento_id):
     
     evento = execute_sql("SELECT * FROM Eventos WHERE id = %s", [evento_id])
     if not evento or evento[0][5] != request.session['user_id']:
-        messages.error(request, "No tienes permiso para editar este evento.")
         return redirect('eventos')
     
     if request.method == 'POST':
@@ -122,4 +128,32 @@ def editar_evento(request, evento_id):
         return redirect('evento_detalle', evento_id=evento_id)
     
     categorias = execute_sql("SELECT id, nombre FROM Categoria")
+    print(evento[0])
     return render(request, 'eventos/editar_evento.html', {'evento': evento[0], 'categorias': categorias})
+
+def eliminar_evento(request, evento_id):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    evento = execute_sql("SELECT * FROM Eventos WHERE id = %s", [evento_id])
+
+    if not evento:
+        return redirect('eventos')
+    if request.session['user_id'] == evento[0][5]:
+        execute_sql("EXEC EliminarEvento @evento_id=%s", [evento_id])
+        messages.success(request, 'El evento ha sido eliminado.')
+        return redirect('eventos')
+    else:
+        return redirect('evento_detalle', evento_id=evento_id)
+
+def eliminar_asistente(request, evento_id):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    evento = execute_sql("SELECT * FROM Eventos WHERE id = %s", [evento_id])
+
+    if not evento:
+        return redirect('eventos')
+    asistencia = execute_sql("SELECT * FROM Asistentes WHERE evento_id = %s AND usuario_id = %s", [evento_id, request.session['user_id']])
+    if asistencia:
+        execute_sql("DELETE FROM Asistentes WHERE evento_id = %s AND usuario_id = %s", [evento_id, request.session['user_id']])
+        messages.success(request, 'Te has eliminado como asistente del evento.')
+    return redirect('evento_detalle', evento_id=evento_id)

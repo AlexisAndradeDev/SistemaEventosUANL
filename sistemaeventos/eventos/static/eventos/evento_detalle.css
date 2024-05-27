@@ -12,18 +12,20 @@ h2 {
     margin-bottom: 20px;
 }
 
-p {
+label {
+    display: block;
+    margin: 10px 0 5px;
     text-align: left;
-    margin: 10px 0;
+    color: #555;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #0073e6;
-    color: white;
-    border: none;
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    cursor: pointer;
+    box-sizing: border-box;
 }
 
 button:hover {
@@ -36,6 +38,6 @@ ul {
 }
 
 li {
-    text-align: left;
+    text-align: center;
     margin: 5px 0;
 }
