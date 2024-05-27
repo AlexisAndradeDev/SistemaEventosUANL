@@ -14,22 +14,28 @@ def execute_sql(query, params=None):
             return None
 
 def eventos(request):
-    query = "SELECT * FROM Eventos WHERE 1=1"
+    query = """
+    SELECT e.id, e.nombre, e.descripcion, e.lugar, e.fecha, c.nombre as categoria, u.nombre as creador_nombre, u.apellido_paterno as creador_paterno, u.apellido_materno as creador_materno
+    FROM Eventos e
+    JOIN Categoria c ON e.categoria_id = c.id
+    JOIN Usuario u ON e.creador_id = u.id
+    WHERE 1=1
+    """
     params = []
 
     mes = request.GET.get('mes')
     if mes:
-        query += " AND MONTH(fecha) = %s"
+        query += " AND MONTH(e.fecha) = %s"
         params.append(mes)
 
     categoria = request.GET.get('categoria')
     if categoria:
-        query += " AND categoria_id = %s"
+        query += " AND e.categoria_id = %s"
         params.append(categoria)
 
     keyword = request.GET.get('keyword')
     if keyword:
-        query += " AND nombre LIKE %s"
+        query += " AND e.nombre LIKE %s"
         params.append(f'%{keyword}%')
 
     eventos = execute_sql(query, params)
