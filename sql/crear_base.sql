@@ -25,9 +25,10 @@ CREATE TABLE Eventos (
 );
 
 CREATE TABLE Asistentes (
-    evento_id INT,
-    usuario_id INT,
-    PRIMARY KEY (evento_id, usuario_id),
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    evento_id INT NOT NULL,
+    usuario_id INT NOT NULL,
     FOREIGN KEY (evento_id) REFERENCES Eventos (id) ON DELETE NO ACTION,
-    FOREIGN KEY (usuario_id) REFERENCES Usuario (id) ON DELETE NO ACTION
+    FOREIGN KEY (usuario_id) REFERENCES Usuario (id) ON DELETE NO ACTION,
+    UNIQUE (evento_id, usuario_id)
 );
