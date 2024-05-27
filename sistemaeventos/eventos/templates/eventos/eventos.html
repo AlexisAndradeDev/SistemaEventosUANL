@@ -8,6 +8,33 @@
 <div class="container">
     <h2>Eventos</h2>
     <a href="{% url 'crear_evento' %}" class="btn btn-primary">Crear Nuevo Evento</a>
+    
+    <form method="get" action="" class="form-filters">
+        <div>
+            <label for="mes">Mes:</label>
+            <select name="mes" id="mes">
+                <option value="">Todos</option>
+                {% for mes in meses %}
+                <option value="{{ mes.id }}">{{ mes.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="categoria">Categoría:</label>
+            <select name="categoria" id="categoria">
+                <option value="">Todas</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.0 }}">{{ categoria.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="keyword">Buscar:</label>
+            <input type="text" name="keyword" id="keyword" placeholder="Buscar por nombre">
+        </div>
+        <button type="submit">Buscar</button>
+    </form>
+    
     <div class="event-grid">
         {% for evento in eventos %}
         <div class="event-card">

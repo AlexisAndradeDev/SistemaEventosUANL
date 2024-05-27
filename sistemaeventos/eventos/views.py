@@ -8,14 +8,48 @@ from datetime import datetime
 def execute_sql(query, params=None):
     with connection.cursor() as cursor:
         cursor.execute(query, params)
-        if query.strip().upper().startswith("SELECT"):
+        if cursor.description:
             return cursor.fetchall()
         else:
             return None
 
 def eventos(request):
-    eventos = execute_sql("SELECT e.id, e.nombre, e.descripcion, e.lugar, e.fecha, c.nombre as categoria, u.email as creador FROM Eventos e JOIN Categoria c ON e.categoria_id = c.id JOIN Usuario u ON e.creador_id = u.id")
-    return render(request, 'eventos/eventos.html', {'eventos': eventos})
+    query = "SELECT * FROM Eventos WHERE 1=1"
+    params = []
+
+    mes = request.GET.get('mes')
+    if mes:
+        query += " AND MONTH(fecha) = %s"
+        params.append(mes)
+
+    categoria = request.GET.get('categoria')
+    if categoria:
+        query += " AND categoria_id = %s"
+        params.append(categoria)
+
+    keyword = request.GET.get('keyword')
+    if keyword:
+        query += " AND nombre LIKE %s"
+        params.append(f'%{keyword}%')
+
+    eventos = execute_sql(query, params)
+    categorias = execute_sql("SELECT id, nombre FROM Categoria")
+    meses = (
+        {'id': 1, 'nombre': 'Enero'},
+        {'id': 2, 'nombre': 'Febrero'},
+        {'id': 3, 'nombre': 'Marzo'},
+        {'id': 4, 'nombre': 'Abril'},
+        {'id': 5, 'nombre': 'Mayo'},
+        {'id': 6, 'nombre': 'Junio'},
+        {'id': 7, 'nombre': 'Julio'},
+        {'id': 8, 'nombre': 'Agosto'},
+        {'id': 9, 'nombre': 'Septiembre'},
+        {'id': 10, 'nombre': 'Octubre'},
+        {'id': 11, 'nombre': 'Noviembre'},
+        {'id': 12, 'nombre': 'Diciembre'},  
+    )
+
+    return render(request, 'eventos/eventos.html', {'eventos': eventos, 'meses': meses, 'categorias': categorias})
 
 def evento_detalle(request, evento_id):
     evento = execute_sql("SELECT e.id, e.nombre, e.descripcion, e.lugar, e.fecha, c.nombre as categoria, u.email as creador, e.creador_id FROM Eventos e JOIN Categoria c ON e.categoria_id = c.id JOIN Usuario u ON e.creador_id = u.id WHERE e.id = %s", [evento_id])
