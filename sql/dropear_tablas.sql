@@ -1,0 +1,6 @@
+USE sistemaeventos
+
+DROP TABLE IF EXISTS Eventos;
+DROP TABLE IF EXISTS Asistentes;
+DROP TABLE IF EXISTS Usuario;
+DROP TABLE IF EXISTS Categoria;

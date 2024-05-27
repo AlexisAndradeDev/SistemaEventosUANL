@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'authentication',
+    'eventos',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,3 +133,5 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+LOGIN_URL = '/authentication/login/'

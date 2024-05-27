@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Eventos{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'eventos/eventos.css' %}">{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Eventos</h2>
+    <a href="{% url 'crear_evento' %}" class="btn btn-primary">Crear Nuevo Evento</a>
+    <div class="event-grid">
+        {% for evento in eventos %}
+        <div class="event-card">
+            <h3>{{ evento.1 }}</h3>
+            <p>{{ evento.2 }}</p>
+            <p><strong>Lugar:</strong> {{ evento.3 }}</p>
+            <p><strong>Fecha:</strong> {{ evento.4 }}</p>
+            <p><strong>Categoría:</strong> {{ evento.5 }}</p>
+            <p><strong>Creador:</strong> {{ evento.6 }}</p>
+            <a href="{% url 'evento_detalle' evento.0 %}">Ver más</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

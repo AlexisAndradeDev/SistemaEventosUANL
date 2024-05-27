@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar Evento{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'eventos/editar_evento.css' %}">{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Editar Evento</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ evento.1 }}" required>
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required>{{ evento.2 }}</textarea>
+        <label for="lugar">Lugar:</label>
+        <input type="text" id="lugar" name="lugar" value="{{ evento.3 }}" required>
+        <label for="fecha">Fecha:</label>
+        <input type="datetime-local" id="fecha" name="fecha" value="{{ evento.4|date:'Y-m-d\\TH:i' }}" required>
+        <label for="categoria_id">Categoría:</label>
+        <select id="categoria_id" name="categoria_id" required>
+            {% for categoria in categorias %}
+            <option value="{{ categoria.0 }}" {% if categoria.0 == evento.5 %}selected{% endif %}>{{ categoria.1 }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Actualizar Evento</button>
+    </form>
+</div>
+{% endblock %}

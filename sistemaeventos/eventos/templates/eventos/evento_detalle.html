@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Detalle del Evento{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'eventos/evento_detalle.css' %}">{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ evento.1 }}</h2>
+    <p>{{ evento.2 }}</p>
+    <p><strong>Lugar:</strong> {{ evento.3 }}</p>
+    <p><strong>Fecha:</strong> {{ evento.4 }}</p>
+    <p><strong>Categoría:</strong> {{ evento.5 }}</p>
+    <p><strong>Creador:</strong> {{ evento.6 }}</p>
+    {% if es_creador %}
+        <a href="{% url 'editar_evento' evento.0 %}" class="btn btn-primary">Editar Evento</a>
+        <a href="{% url 'asistir_evento' evento.0 %}" class="btn btn-primary">Asistiré al evento</a>
+    {% else %}
+        <a href="{% url 'asistir_evento' evento.0 %}" class="btn btn-primary">Asistiré al evento</a>
+    {% endif %}
+    <h3>Asistentes</h3>
+    <ul>
+        {% for asistente in asistentes %}
+        <li>{{ asistente.0 }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

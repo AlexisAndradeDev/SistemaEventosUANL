@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Crear Evento{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'eventos/crear_evento.css' %}">{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Crear Evento</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required></textarea>
+        <label for="lugar">Lugar:</label>
+        <input type="text" id="lugar" name="lugar" required>
+        <label for="fecha">Fecha:</label>
+        <input type="datetime-local" id="fecha" name="fecha" required>
+        <label for="categoria_id">Categoría:</label>
+        <select id="categoria_id" name="categoria_id" required>
+            {% for categoria in categorias %}
+            <option value="{{ categoria.0 }}">{{ categoria.1 }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Crear Evento</button>
+    </form>
+</div>
+{% endblock %}
