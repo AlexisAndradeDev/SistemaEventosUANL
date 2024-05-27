@@ -50,7 +50,6 @@ CREATE TABLE Eventos (
     id INT IDENTITY(1,1) PRIMARY KEY,
     nombre NVARCHAR(255) NOT NULL,
     descripcion NVARCHAR(MAX) NOT NULL,
-    lugar NVARCHAR(255) NOT NULL,
     fecha DATETIME NOT NULL,
     creador_id INT NOT NULL,
     categoria_id INT NOT NULL,
